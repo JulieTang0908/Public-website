@@ -1,0 +1,58 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>参数与读图说明</title><style>body{margin:0;background:#f5f7f3;color:#203c43;font:16px/1.85 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1000px;margin:auto;padding:32px 22px 70px}a{color:#157a80}nav{display:flex;flex-wrap:wrap;gap:20px;border-bottom:1px solid #d6e2df;padding-bottom:16px}h1{line-height:1.35}h2{margin-top:34px;font-size:23px}p{max-width:880px}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px;border-bottom:1px solid #d6e2df}figure,section{margin:24px 0;background:white;padding:20px;border:1px solid #d6e2df;border-radius:10px}img{width:100%;height:auto}blockquote{margin:20px 0;padding:10px 20px;border-left:3px solid #c16a37;background:white}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eef4f1;padding:14px;font:15px/1.8 monospace}code{overflow-wrap:anywhere}.note{color:#627879;font-size:14px}@media(max-width:600px){main{padding:18px 12px}table{font-size:13px}th,td{padding:6px}figure,section{padding:12px}}</style></head><body><main><nav><a href="index.html">交互图表</a><a href="guide.html">参数与读图说明</a><a href="figures.html">静态图片</a><a href="guide.md" download>下载 Markdown 说明</a></nav><p class="note">公式以原始 LaTeX 文本保留，无需外部公式服务。完整说明也可下载为 Markdown。</p><h1>一维随机排列模型：N–x–p 概率图说明</h1>
+<p>配套交互页面：同目录下的 index.html；本说明随独立网站一起分发。</p>
+<p>本文用于解释页面里的参数、曲面的含义，以及向导师汇报时可以使用的说法。当前结果来自一维合成数据。</p>
+<h2>1. 研究问题和模型</h2>
+<p>我们考虑一个长度为 <strong>N 个格子</strong>的一维视野。空格读数为 0，短粒子 A 占一格，理想读数为 <code>[1]</code>；长杆 B 占相邻两格，理想读数为 <code>[2,2]</code>。对象不重叠，不要求填满视野，只计入完整长杆。</p>
+<p>记短粒子数为 a，长杆数为 b，合法组成满足：</p>
+<pre>$$a\geq0,\quad b\geq0,\quad a+2b\leq N.$$</pre>
+<p>每种合法数量组合采用相同先验概率；给定组成后，再让该组成的合法摆放等概率出现。这里“组成等概率”与“把所有摆放直接等权混合”不同。</p>
+<p>项目包含两个需要区分的问题：</p>
+<ul><li><strong>特征分布</strong>：组成和摆放随机变化时，某个观测特征 F 的分布 $P(F\mid N)$ 如何随视野长度变化？</li><li><strong>组成推断</strong>：看到一条有噪声的观测后，每种组成有多大可能，即 $P(a,b\mid z,N)$？</li></ul>
+<p>页面默认显示第二个问题；“原始特征的边际分布”选项展示第一个问题。</p>
+<h2>2. 三个坐标轴分别是什么</h2>
+<table><tr><th>参数</th><th>含义</th><th>读图时需要注意</th></tr><tr><td>N</td><td>视野格数</td><td>包含 1～100 的每个整数，不是粒子总数。</td></tr><tr><td>a、b</td><td>短粒子数、长杆数</td><td>它们是我们希望推断的组成。</td></tr><tr><td>x</td><td>将组成 <code>(a,b)</code> 编成的整数编号</td><td>已知 N 后可以反解组成，但编号差值没有物理距离意义。</td></tr><tr><td>p</td><td>当前观测下，该组成的后验概率</td><td>每个 N 的所有候选概率相加为 1。</td></tr></table>
+<p>合法组成总数为：</p>
+<pre>$$K_N=(\lfloor N/2\rfloor+1)(N+1-\lfloor N/2\rfloor).$$</pre>
+<p>组成按 b 从小到大分组，组内按 a 排序，编号为：</p>
+<pre>$$x=b(N+2-b)+a,\qquad x=0,1,\ldots,K_N-1.$$</pre>
+<p>页面默认用归一化坐标：</p>
+<pre>$$u=\frac{x}{K_N-1}.$$</pre>
+<p><strong>u=0.5 不表示长杆占 50%。不同 N 下，同一个 u 也未必代表同一种组成。</strong> 这个坐标是为了把数量不同的候选放到共同的展示范围。鼠标悬停可查看具体 a、b。</p>
+<h2>3. 概率、密度和其他控制项</h2>
+<table><tr><th>页面选项</th><th>含义</th></tr><tr><td>概率 p</td><td>单个组成所分得的概率，数值在 0～1 之间。</td></tr><tr><td>区间密度 p/Δx</td><td>概率除以显示坐标上的格点间距。归一化组成坐标下，Δx=1/(K_N−1)。密度可以大于 1，不能读成百分比。</td></tr><tr><td>测量噪声 σ</td><td>每格加性高斯读数误差的标准差；σ=0.5 不是“50% 错误率”。</td></tr><tr><td><code>[2,2]</code> 类型可读</td><td>短粒子与长杆的理想读数不同。</td></tr><tr><td><code>[1,1]</code> 只看占据</td><td>长杆两格也读为 1，容易与相邻短粒子混淆。</td></tr><tr><td>原始值 / 归一化 / Z 标准化</td><td>改变横坐标的表示；Z 标准化不会自动产生正态分布。</td></tr><tr><td>log₁₀ 显示</td><td>用对数高度看较小概率；显示低值有截断，原始概率不变。</td></tr><tr><td>二维热图</td><td>将同一 N 的概率聚合到共同显示区间，以颜色表示区间概率或密度。</td></tr></table>
+<p>这里的 Δx 指<strong>当前显示坐标</strong>的间距，不一定是整数编号的间距。如果选择原始编号，间距就是 1。</p>
+<h2>4. 整个曲面表示什么</h2>
+<p>固定一个 N，可以得到一条“候选组成—概率”曲线。把 N=1、2、…、100 的曲线沿 N 轴排在一起，再连接成曲面，就得到这张图。</p>
+<ul><li>峰较高的位置：当前观测更支持这些候选组成。</li><li>多个峰：存在多组较合理的解释，需要保留不确定性。</li><li>概率集中在少数候选：在当前模型与观测下，组成约束较强。</li><li>概率分散：观测难以排除很多候选。</li></ul>
+<p><strong>组成编号的排序会影响峰的形状。</strong> 相邻编号不一定代表相近的物理组成，因此峰宽只能辅助读图；定量比较不确定性，应进一步看可信候选集合、熵或 a、b 各自的边际分布。</p>
+<p>页面中橙线是选中的 N，细线是其他整数 N 的曲线。三角面只用于连接和显示，没有额外计算小数 N 的实验；曲面下的总体积也不是归一化依据。应检查每个 N 切片的概率和是否为 1。</p>
+<p>目前各 N 使用相关的合成场景与共用噪声前缀。因此这张曲面是演示，不能仅凭它断言“视野增大后识别准确率必然提高”。这一结论需要独立重复实验。</p>
+<h2>5. 图是怎么算出来的</h2>
+<p>观测模型为：</p>
+<pre>$$z_i=m_i+\varepsilon_i,\qquad \varepsilon_i\sim\mathcal N(0,\sigma^2).$$</pre>
+<p>对于一种候选组成 <code>(a,b)</code>，我们对其所有合法摆放计算观测似然，并取平均。合法摆放数是：</p>
+<pre>$$R(N,a,b)=\binom{N-b}{b}\binom{N-2b}{a}.$$</pre>
+<p>省略所有候选共用的高斯常数后：</p>
+<pre>$$L_{a,b}(z)=\frac{1}{R(N,a,b)}\sum_{M\in\mathcal M_{N,a,b}}\exp\!\left[-\frac{\|z-M\|^2}{2\sigma^2}\right].$$</pre>
+<p>其中 $\mathcal M_{N,a,b}$ 是该组成的合法摆放集合。在二值模式下，用占据读数替代上式中的 M。结合均匀组成先验，得到：</p>
+<pre>$$P(a,b\mid z,N)=\frac{L_{a,b}(z)}{\sum_{(a&#x27;,b&#x27;)\text{合法}}L_{a&#x27;,b&#x27;}(z)}.$$</pre>
+<p>实际计算使用动态规划求摆放之和，不必逐张列出所有大视野图像。每个整数 N 都单独计算；不是只计算少数 N 再补出中间曲线。</p>
+<p>例如，默认 <code>[2,2]</code>、σ=0.5、N=50 时，共有 676 种合法组成。最高概率候选约为 <code>(a,b)=(17,9)</code>，概率约 5.16%；合成真值为 <code>(17,8)</code>。这说明最高概率只是当前最受支持的候选，不能保证等于真值。在归一化坐标下，该峰的密度约 34.8，仍不代表 3480% 的概率。</p>
+<h2>6. “六个特征”和“正态曲线”应怎样理解</h2>
+<p>前六个特征包括总读数 F0、位置加权和 F1、相邻乘积 F2、非零段数 F3、段长度平方和 F4、值为 2 的格数 F5。</p>
+<p>在理想、无噪声的 <code>[2,2]</code> 模型下：</p>
+<pre>$$F_0=a+4b,\quad F_5=2b\quad\Rightarrow\quad a=F_0-2F_5,\ b=F_5/2.$$</pre>
+<p>因此理想条件下，仅 F0、F5 就能确定数量组成。但当前含噪后验计算使用的是<strong>完整逐格连续读数</strong>，尚未证明只保留六个特征后也能达到相同推断效果。x 是候选组成的编码，不是已经验证过的含噪充分特征。</p>
+<p>原项目的特征边际分布为：</p>
+<pre>$$P(F=f\mid N)=\frac{1}{K_N}\sum_{(a,b)\text{合法}}P(F=f\mid a,b,N).$$</pre>
+<p>页面的 F0 分布全部精确计算；F2 在 N≤8 时精确枚举，其余每个 N 使用 30,000 次按组成先验抽样的模拟。</p>
+<p>离散实验可以与正态近似比较：用正态分布落入每个整数格点对应区间的概率，与离散概率比较；但是否接近正态需要检验。在当前均匀组成先验下，F0/N 的大 N 极限是三角分布，不能强行要求它成为正态。高斯测量噪声也不意味着组成后验必须是高斯形状。</p>
+<h2>7. 向导师介绍时可以这样说</h2>
+<blockquote>我们先建立了一个一维模型：短粒子占一格，长杆占两格，各种合法数量组合采用均匀先验。看到模拟的含噪读数后，我们对每种组成的所有合法摆放求平均似然，再计算组成的后验概率。
+
+为了把 N=1～100 的结果放在同一张图里，我们把短粒子数和长杆数编码成一个可逆编号 x。固定 N 是一条组成概率曲线，多条曲线排列起来就是这个曲面。它主要展示观测能把组成约束到什么程度，以及类型信息丢失或噪声存在时还有多少种可能解释。
+
+这张图目前是合成数据下的组成推断演示。原项目的特征边际分布 P(F|N) 在另一个视图中单独展示。接下来需要分别检验：哪些特征分布可以用正态近似，以及仅保留有限特征时，组成推断会损失多少信息。当前还不能把这张图当成真实照片识别已经完成的证据。</blockquote>
+<h2>8. 配套文件</h2>
+<ul><li><code>index.html</code>：自包含交互页面，可离线打开。</li><li><code>N_x_p_posterior_surface.png</code>：静态三维图，使用归一化组成编号和密度高度，σ=0.5。</li><li><code>N_feature_probability_heatmaps.png</code>：原始特征 F0、F2 的分布热图。</li><li><code>F0_standardized_vs_normal.png</code>：离散标准化分布与正态参考的比较。</li></ul>
+<p>此版本无账号系统，图表计算、数据和绘图程序均在浏览器本地运行。公共网址由实际部署平台提供。</p></main></body></html>
